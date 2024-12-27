@@ -1,0 +1,16 @@
+{
+    "name": "jwt-scraper",
+    "env": {
+        "GOOGLE_CLOUD_PROJECT": {
+            "description": "Google Cloud Project ID",
+            "required": true
+        }
+    },
+    "options": {
+        "allow-unauthenticated": true,
+        "memory": "2Gi",
+        "cpu": "2",
+        "port": 8080,
+        "region": "europe-west1"
+    }
+} 
