@@ -25,23 +25,15 @@ The bot does the following:
 
 1. Go to the [Google Cloud Console](https://console.cloud.google.com) and open the Cloud Shell.
 
-2. Create secrets in Google Cloud Secret Manager:
+2. Clone this repository:
 ```bash
-printf "..." | gcloud secrets create USERNAME --data-file=- # Enter your username
-printf "..." | gcloud secrets create PASSWORD --data-file=- # Enter your password
-printf "..." | gcloud secrets create URL --data-file=- # Enter the URL
-printf "..." | gcloud secrets create API_KEY --data-file=- # Enter a secure random API key
+git clone https://github.com/nilsreichardt/scrape-jwt-template
+cd jwt-scraper
 ```
 
-3. Grant access to your Cloud Run service account:
+3. Execute the `setup.sh` script to create the required resources:
 ```bash
-PROJECT_ID=$(gcloud config get-value project)
-PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")
-SERVICE_ACCOUNT="${PROJECT_NUMBER}-compute@developer.gserviceaccount.com"
-gcloud secrets add-iam-policy-binding USERNAME --member="serviceAccount:${SERVICE_ACCOUNT}" --role="roles/secretmanager.secretAccessor"
-gcloud secrets add-iam-policy-binding PASSWORD --member="serviceAccount:${SERVICE_ACCOUNT}" --role="roles/secretmanager.secretAccessor"
-gcloud secrets add-iam-policy-binding URL --member="serviceAccount:${SERVICE_ACCOUNT}" --role="roles/secretmanager.secretAccessor"
-gcloud secrets add-iam-policy-binding API_KEY --member="serviceAccount:${SERVICE_ACCOUNT}" --role="roles/secretmanager.secretAccessor"
+./setup.sh <username> <password> <url> <api_key>
 ```
 
 ## Local Testing
@@ -65,6 +57,7 @@ docker run -p 8080:8080 \
   -e PASSWORD=${PASSWORD} \
   -e URL=${URL} \
   -e API_KEY=${API_KEY} \
+  --shm-size="2g" \
   jwt-scraper
 ```
 
@@ -91,7 +84,7 @@ All endpoints require an API key to be passed as a query parameter `api_key`.
 
 ## Deployment
 
-Click the "Run on Google Cloud" button above, or deploy manually using:
+To deploy manually using:
 
 ```bash
 gcloud run deploy jwt-scraper \
