@@ -2,6 +2,13 @@
 
 # Usage: ./setup.sh <username> <password> <url> <api_key>
 
+# Disable all interactive prompts when running gcloud commands. If input is
+# required, defaults will be used, or an error will be raised.
+#
+# Is needed because when running the script the first time, the user is prompted
+# to enable the Cloud Run API, and the user needs to confirm by entering 'y'.
+export CLOUDSDK_CORE_DISABLE_PROMPTS=1
+
 echo "Setting up secrets..."
 
 printf $0 | gcloud secrets create USERNAME --data-file=- # Enter your username
