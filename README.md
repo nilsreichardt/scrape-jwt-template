@@ -27,8 +27,7 @@ The bot does the following:
 
 2. Clone this repository:
 ```bash
-git clone https://github.com/nilsreichardt/scrape-jwt-template
-cd jwt-scraper
+git clone https://github.com/nilsreichardt/scrape-jwt-template jwt-scraper && cd jwt-scraper
 ```
 
 3. Execute the `setup.sh` script to create the required resources:
