@@ -51,11 +51,6 @@ def scrape_jwt():
         driver.get(url)
         print("Opened the website...")
 
-        # Click the "Login per SSO" button
-        sso_button = wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Login via SSO")))
-        sso_button.click()
-        print("Clicked the 'Login per SSO' button...")
-
         # Enter "tum.de" in the input field
         domain_input = wait.until(EC.presence_of_element_located((By.TAG_NAME, "input")))
         domain_input.send_keys("tum.de")
