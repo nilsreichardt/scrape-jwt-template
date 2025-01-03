@@ -6,6 +6,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+import base64
 from functools import wraps
 
 app = Flask(__name__)
@@ -27,11 +28,17 @@ def require_api_key(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def get_url():
+    url_base64 = "aHR0cHM6Ly9hdXRoLmFubnkuZXUvbG9naW4vc3Nv"
+    url_bytes = base64.b64decode(url_base64)
+    url = url_bytes.decode('utf-8')
+    return url
+
 def scrape_jwt():
     # Get credentials from Secret Manager or environment variables
     username = os.environ.get("USERNAME")
     password = os.environ.get("PASSWORD")
-    url = os.environ.get("URL")
+    url = get_url()
     
     if not all([username, password, url]):
         raise ValueError("Missing required credentials")
