@@ -41,26 +41,24 @@ git clone https://github.com/nilsreichardt/scrape-jwt-template jwt-scraper && cd
 ```bash
 export USERNAME=your_username
 export PASSWORD=your_password
-export URL=https://...
 export API_KEY=your_api_key
 ```
 
 ### 1. Run locally using Docker:
 
-_Note: The Docker image only works on Linux. If you are using macOS, you can run the web server locally._
+_Note: The Docker image only works on x86 architecture. If you are using arm64, you can run the web server locally (see below)._
 
 ```bash
 docker build -t jwt-scraper .
 docker run -p 8080:8080 \
   -e USERNAME=${USERNAME} \
   -e PASSWORD=${PASSWORD} \
-  -e URL=${URL} \
   -e API_KEY=${API_KEY} \
   --shm-size="2g" \
   jwt-scraper
 ```
 
-If you are using macOS, you can the web server locally:
+If you are using arm64, you can the web server locally:
 
 1. Ensure [Chromedrive](https://googlechromelabs.github.io/chrome-for-testing/) is installed and in your PATH
 2. Run the web server:
@@ -78,7 +76,7 @@ curl "http://localhost:8080/get-jwt?api_key=YOUR_API_KEY"
 
 All endpoints require an API key to be passed as a query parameter `api_key`.
 
-- `GET /get-jwt?api_key=YOUR_API_KEY`: Returns a JWT token from `URL` using `USERNAME` and `PASSWORD`
+- `GET /get-jwt?api_key=YOUR_API_KEY`: Returns a JWT token using `USERNAME` and `PASSWORD`
 - `GET /health?api_key=YOUR_API_KEY`: Health check endpoint
 
 ## Deployment
@@ -91,8 +89,11 @@ gcloud run deploy jwt-scraper \
   --platform managed \
   --region europe-west1 \
   --allow-unauthenticated \
+  --memory 2Gi \
   --update-secrets=USERNAME=USERNAME:1 \
   --update-secrets=PASSWORD=PASSWORD:1 \
-  --update-secrets=URL=URL:1 \
-  --update-secrets=API_KEY=API_KEY:1
+  --update-secrets=URL=URL:2 \
+  --update-secrets=API_KEY=API_KEY:1 \
+  --project anny-bot
 ```
+ 
