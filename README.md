@@ -32,7 +32,7 @@ git clone https://github.com/nilsreichardt/scrape-jwt-template jwt-scraper && cd
 
 3. Execute the `setup.sh` script to create the required resources:
 ```bash
-./setup.sh <username> <password> <url> <api_key>
+./setup.sh <username> <password>
 ```
 
 ## Local Testing
