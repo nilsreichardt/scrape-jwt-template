@@ -80,11 +80,11 @@ deploy_cloud_run() {
     --update-secrets=API_KEY=API_KEY:1
 }
 
-# Loop to retry the deployment up to 3 times if it fails
+# Loop to retry the deployment up to 5 times if it fails
 #
 # The deployment typically fails with the first attempt because the Cloud Build
 # isn't created yet. The second attempt usually succeeds.
-MAX_RETRIES=3
+MAX_RETRIES=5
 retry_count=0
 
 until deploy_cloud_run || [ $retry_count -eq $MAX_RETRIES ]; do
