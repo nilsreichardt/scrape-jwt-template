@@ -23,7 +23,7 @@ The bot does the following:
 
 ## Setup
 
-1. Go to the [Google Cloud Console](https://console.cloud.google.com) and create a new project
+1. Go to the [Google Cloud Console](https://console.cloud.google.com), create a new project and open this project.
   
 2. Open the Cloud Shell and run `gcloud config set project [YOUR_PROJECT_ID]`
 
