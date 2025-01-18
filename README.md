@@ -25,7 +25,7 @@ The bot does the following:
 
 1. Go to the [Google Cloud Console](https://console.cloud.google.com) and create a new project
   
-3. Open the Cloud Shell and run `gcloud config set project [YOUR_PROJECT_ID]`
+2. Open the Cloud Shell and run `gcloud config set project [YOUR_PROJECT_ID]`
 
 3. Clone this repository:
 ```bash
