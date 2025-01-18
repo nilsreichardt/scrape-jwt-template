@@ -27,7 +27,7 @@ The bot does the following:
   
 3. Open the Cloud Shell and run `gcloud config set project [YOUR_PROJECT_ID]`
 
-4. Clone this repository:
+3. Clone this repository:
 ```bash
 git clone https://github.com/nilsreichardt/scrape-jwt-template jwt-scraper && cd jwt-scraper && chmod +x setup.sh
 ```
