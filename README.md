@@ -23,8 +23,8 @@ The bot does the following:
 
 ## Setup
 
-1. Go to the [Google Cloud Console](https://console.cloud.google.com) and open the Cloud Shell.
-
+1. Go to the [Google Cloud Console](https://console.cloud.google.com), create a new project and open this project.
+  
 2. Clone this repository:
 ```bash
 git clone https://github.com/nilsreichardt/scrape-jwt-template jwt-scraper && cd jwt-scraper && chmod +x setup.sh
