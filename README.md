@@ -98,4 +98,4 @@ gcloud run deploy jwt-scraper \
   --update-secrets=API_KEY=API_KEY:1 \
   --project anny-bot
 ```
- 
+
