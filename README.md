@@ -20,7 +20,7 @@ The bot does the following:
 
 ## Deployment
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/nilsreichardt/google-flights-mcp)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/nilsreichardt/scrape-jwt-template)
 
 1. Click the button above
 2. For `TUM_USERNAME` and `TUM_PASSWORD` enter your TUM credentials
