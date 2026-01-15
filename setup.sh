@@ -22,12 +22,12 @@ gcloud services enable secretmanager.googleapis.com
 # seconds.
 sleep 10
 
-if ! gcloud secrets describe USERNAME &>/dev/null; then
-  printf $1 | gcloud secrets create USERNAME --data-file=-
+if ! gcloud secrets describe TUM_USERNAME &>/dev/null; then
+  printf $1 | gcloud secrets create TUM_USERNAME --data-file=-
 fi
 
-if ! gcloud secrets describe PASSWORD &>/dev/null; then
-  printf $2 | gcloud secrets create PASSWORD --data-file=-
+if ! gcloud secrets describe TUM_PASSWORD &>/dev/null; then
+  printf $2 | gcloud secrets create TUM_PASSWORD --data-file=-
 fi
 
 if ! gcloud secrets describe API_KEY &>/dev/null; then
@@ -61,8 +61,8 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 # Update the SERVICE_ACCOUNT variable to use the new service account
 SERVICE_ACCOUNT="${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 
-gcloud secrets add-iam-policy-binding USERNAME --member="serviceAccount:${SERVICE_ACCOUNT}" --role="roles/secretmanager.secretAccessor"
-gcloud secrets add-iam-policy-binding PASSWORD --member="serviceAccount:${SERVICE_ACCOUNT}" --role="roles/secretmanager.secretAccessor"
+gcloud secrets add-iam-policy-binding TUM_USERNAME --member="serviceAccount:${SERVICE_ACCOUNT}" --role="roles/secretmanager.secretAccessor"
+gcloud secrets add-iam-policy-binding TUM_PASSWORD --member="serviceAccount:${SERVICE_ACCOUNT}" --role="roles/secretmanager.secretAccessor"
 gcloud secrets add-iam-policy-binding API_KEY --member="serviceAccount:${SERVICE_ACCOUNT}" --role="roles/secretmanager.secretAccessor"
 
 echo "Starting to deploy the Cloud Run service..."
@@ -74,10 +74,11 @@ deploy_cloud_run() {
     --region europe-west1 \
     --allow-unauthenticated \
     --memory 2Gi \
-    --service-account $SERVICE_ACCOUNT \
-    --update-secrets=USERNAME=USERNAME:1 \
-    --update-secrets=PASSWORD=PASSWORD:1 \
-    --update-secrets=API_KEY=API_KEY:1
+    --update-secrets=TUM_USERNAME=TUM_USERNAME:1 \
+    --update-secrets=TUM_PASSWORD=TUM_PASSWORD:1 \
+    --update-secrets=API_KEY=API_KEY:1 \
+    --project $PROJECT_ID \
+    --service-account $SERVICE_ACCOUNT
 }
 
 # Loop to retry the deployment up to 5 times if it fails
