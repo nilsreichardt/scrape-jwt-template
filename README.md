@@ -23,9 +23,10 @@ The bot does the following:
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/nilsreichardt/scrape-jwt-template)
 
 1. Click the button above
-2. For `TUM_USERNAME` and `TUM_PASSWORD` enter your TUM credentials
-3. For `API_KEY` enter a random string
-4. Click "Deploy"
+2. Enter for "Blueprint Name" any name you want, e.g. `jwt-scraper`
+3. For `TUM_USERNAME` and `TUM_PASSWORD` enter your TUM credentials
+4. For `API_KEY` enter a random string
+5. Click "Deploy"
 
 ## Local Testing
 
