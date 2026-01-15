@@ -27,6 +27,15 @@ The bot does the following:
 3. For `TUM_USERNAME` and `TUM_PASSWORD` enter your TUM credentials
 4. For `API_KEY` enter a random string
 5. Click "Deploy"
+6. After deployment, copy the URL, e.g. `https://scrape-jwt-template.onrender.com`.
+
+For the bot, paste the following URL into your profile settings:
+
+```
+<YOUR_URL>/get-jwt?api_key=<YOUR_API_KEY>
+```
+
+Example: `https://scrape-jwt-template.onrender.com/get-jwt?api_key=12345678`
 
 ## Local Testing
 
