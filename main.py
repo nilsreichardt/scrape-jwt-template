@@ -30,14 +30,12 @@ def require_api_key(f):
 
 def get_url():
     url_base64 = "aHR0cHM6Ly9hdXRoLmFubnkuZXUvbG9naW4vc3Nv"
-    url_bytes = base64.b64decode(url_base64)
-    url = url_bytes.decode('utf-8')
-    return url
+    return base64.b64decode(url_base64).decode('utf-8')
 
 def scrape_jwt():
     # Get credentials from Secret Manager or environment variables
-    username = os.environ.get("USERNAME")
-    password = os.environ.get("PASSWORD")
+    username = os.environ.get("TUM_USERNAME")
+    password = os.environ.get("TUM_PASSWORD")
     url = get_url()
     
     if not all([username, password, url]):
@@ -45,12 +43,35 @@ def scrape_jwt():
 
     # Configure Chrome options
     options = ChromeOptions()
-    options.add_argument('--headless')
+    # options.add_argument('--headless')
     options.add_argument('--disable-gpu')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     
+    # Set stealth headers
+    user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36'
+    options.add_argument(f'user-agent={user_agent}')
+    
     driver = Chrome(options=options)
+    
+    # Apply modern Client Hints for better stealth
+    driver.execute_cdp_cmd('Network.setUserAgentOverride', {
+        'userAgent': user_agent,
+        'platform': 'macOS',
+        'userAgentMetadata': {
+            'brands': [
+                {'brand': 'Google Chrome', 'version': '143'},
+                {'brand': 'Chromium', 'version': '143'},
+                {'brand': 'Not A(Brand', 'version': '24'}
+            ],
+            'fullVersion': '143.0.0.0',
+            'platform': 'macOS',
+            'platformVersion': '10.15.7',
+            'architecture': 'x86',
+            'model': '',
+            'mobile': False
+        }
+    })
     wait = WebDriverWait(driver, 10)  # Add explicit wait
     
     try:
@@ -79,7 +100,9 @@ def scrape_jwt():
         time.sleep(5)  # You might want to replace this with a more robust wait condition
 
         # Get the jwt cookie
-        jwt_cookie = driver.get_cookie("jwt")["value"]
+        jwt_cookie_name_base64 = "YW5ueV9zaG9wX2p3dA=="
+        jwt_cookie_name = base64.b64decode(jwt_cookie_name_base64).decode('utf-8')
+        jwt_cookie = driver.get_cookie(jwt_cookie_name)["value"]
         print("Got the JWT cookie...")
 
         return jwt_cookie

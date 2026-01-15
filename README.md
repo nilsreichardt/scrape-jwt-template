@@ -9,7 +9,7 @@ The bot does the following:
 
 1. Opens the provided `URL` in a headless Chrome browser
 2. Selects SSO login
-3. Enters the provided `USERNAME` and `PASSWORD`
+3. Enters the provided `TUM_USERNAME` and `TUM_PASSWORD`
 4. Waits for the JWT token to appear
 5. Extracts the JWT token from the cookies
 6. Returns the JWT token
@@ -41,8 +41,8 @@ Replace `john.doe@tum.de` with your username and `my_password` with your passwor
 
 1. Set up environment variables:
 ```bash
-export USERNAME=your_username
-export PASSWORD=your_password
+export TUM_USERNAME=your_username
+export TUM_PASSWORD=your_password
 export API_KEY=your_api_key
 ```
 
@@ -53,8 +53,8 @@ _Note: The Docker image only works on x86 architecture. If you are using arm64, 
 ```bash
 docker build -t jwt-scraper .
 docker run -p 8080:8080 \
-  -e USERNAME=${USERNAME} \
-  -e PASSWORD=${PASSWORD} \
+  -e TUM_USERNAME=${TUM_USERNAME} \
+  -e TUM_PASSWORD=${TUM_PASSWORD} \
   -e API_KEY=${API_KEY} \
   --shm-size="2g" \
   jwt-scraper
@@ -78,7 +78,7 @@ curl "http://localhost:8080/get-jwt?api_key=YOUR_API_KEY"
 
 All endpoints require an API key to be passed as a query parameter `api_key`.
 
-- `GET /get-jwt?api_key=YOUR_API_KEY`: Returns a JWT token using `USERNAME` and `PASSWORD`
+- `GET /get-jwt?api_key=YOUR_API_KEY`: Returns a JWT token using `TUM_USERNAME` and `TUM_PASSWORD`
 - `GET /health?api_key=YOUR_API_KEY`: Health check endpoint
 
 ## Deployment
@@ -92,9 +92,8 @@ gcloud run deploy jwt-scraper \
   --region europe-west1 \
   --allow-unauthenticated \
   --memory 2Gi \
-  --update-secrets=USERNAME=USERNAME:1 \
-  --update-secrets=PASSWORD=PASSWORD:1 \
-  --update-secrets=URL=URL:2 \
+  --update-secrets=TUM_USERNAME=TUM_USERNAME:1 \
+  --update-secrets=TUM_PASSWORD=TUM_PASSWORD:1 \
   --update-secrets=API_KEY=API_KEY:1 \
   --project anny-bot
 ```
