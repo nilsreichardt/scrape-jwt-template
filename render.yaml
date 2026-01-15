@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: jwt-scraper
+    runtime: docker
+    plan: free
+    autoDeploy: false
+    envVars:
+      - key: TUM_USERNAME
+        sync: false
+      - key: TUM_PASSWORD
+        sync: false
+      - key: API_KEY
+        sync: false

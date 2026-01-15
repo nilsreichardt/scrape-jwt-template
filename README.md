@@ -3,11 +3,11 @@
 > [!NOTE]  
 > This project is a personal project and not intended to work with any other service than the one it was built for.
 
-This service scrapes JWT tokens from the provided `URL` using Chrome automation. It runs as a [Cloud Run](https://cloud.google.com/run?hl=en) service and uses Google Cloud Secret Manager for secure credential storage.
+This service scrapes JWT tokens from the hard-coded URL using Chrome automation.
 
 The bot does the following:
 
-1. Opens the provided `URL` in a headless Chrome browser
+1. Opens the hard-coded URL in a headless Chrome browser
 2. Selects SSO login
 3. Enters the provided `TUM_USERNAME` and `TUM_PASSWORD`
 4. Waits for the JWT token to appear
@@ -16,28 +16,20 @@ The bot does the following:
 
 ## Prerequisites
 
-- Google Cloud account
-- gcloud CLI installed
-- Docker installed (for local testing)
-- Access to Google Cloud Secret Manager
+- [Render.com](https://render.com) account
 
-## Setup
+## Deployment
 
-1. Go to the [Google Cloud Console](https://console.cloud.google.com), create a new project and open this project.
-  
-2. Clone this repository:
-```bash
-git clone https://github.com/nilsreichardt/scrape-jwt-template jwt-scraper && cd jwt-scraper
-```
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/nilsreichardt/google-flights-mcp)
 
-3. Execute the `setup.sh` script to create the required resources:
-```bash
-./setup.sh john.doe@tum.de 'my_password'
-```
-
-Replace `john.doe@tum.de` with your username and `my_password` with your password.
+1. Click the button above
+2. For `TUM_USERNAME` and `TUM_PASSWORD` enter your TUM credentials
+3. For `API_KEY` enter a random string
+4. Click "Deploy"
 
 ## Local Testing
+
+_Note:_ You don't need to do this if you are deploying to Render.com.
 
 1. Set up environment variables:
 ```bash
@@ -79,22 +71,4 @@ curl "http://localhost:8080/get-jwt?api_key=YOUR_API_KEY"
 All endpoints require an API key to be passed as a query parameter `api_key`.
 
 - `GET /get-jwt?api_key=YOUR_API_KEY`: Returns a JWT token using `TUM_USERNAME` and `TUM_PASSWORD`
-- `GET /health?api_key=YOUR_API_KEY`: Health check endpoint
-
-## Deployment
-
-To deploy manually using:
-
-```bash
-gcloud run deploy jwt-scraper \
-  --source . \
-  --platform managed \
-  --region europe-west1 \
-  --allow-unauthenticated \
-  --memory 2Gi \
-  --update-secrets=TUM_USERNAME=TUM_USERNAME:1 \
-  --update-secrets=TUM_PASSWORD=TUM_PASSWORD:1 \
-  --update-secrets=API_KEY=API_KEY:1 \
-  --project anny-bot
-```
- 
+- `GET /health?api_key=YOUR_API_KEY`: Health check endpoint 
