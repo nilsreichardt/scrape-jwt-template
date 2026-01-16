@@ -1,4 +1,5 @@
 import os
+import logging
 from flask import Flask, jsonify, request
 from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.common.by import By
@@ -8,6 +9,10 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import base64
 from functools import wraps
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
@@ -33,6 +38,8 @@ def get_url():
     return base64.b64decode(url_base64).decode('utf-8')
 
 def scrape_jwt():
+    logger.info("Starting to scrape JWT...")
+
     # Get credentials from Secret Manager or environment variables
     username = os.environ.get("TUM_USERNAME")
     password = os.environ.get("TUM_PASSWORD")
@@ -40,6 +47,8 @@ def scrape_jwt():
     
     if not all([username, password, url]):
         raise ValueError("Missing required credentials")
+
+    logger.info("Credentials loaded successfully.")
 
     # Configure Chrome options
     options = ChromeOptions()
@@ -73,17 +82,19 @@ def scrape_jwt():
         }
     })
     wait = WebDriverWait(driver, 10)  # Add explicit wait
+
+    logger.info("Chrome options configured.")
     
     try:
         # Navigate to the website
         driver.get(url)
-        print("Opened the website...")
+        logger.info("Opened the website...")
 
         # Enter "tum.de" in the input field
         domain_input = wait.until(EC.presence_of_element_located((By.TAG_NAME, "input")))
         domain_input.send_keys("tum.de")
         domain_input.send_keys(Keys.RETURN)
-        print("Entered 'tum.de' and pressed Enter...")
+        logger.info("Entered 'tum.de' and pressed Enter...")
 
         # Login with credentials
         username_field = wait.until(EC.presence_of_element_located((By.ID, "username")))
@@ -94,7 +105,7 @@ def scrape_jwt():
         
         login_button = driver.find_element(By.ID, "btnLogin")
         login_button.click()
-        print("Entered credentials and clicked the 'Login' button...")
+        logger.info("Entered credentials and clicked the 'Login' button...")
 
         # Wait for the JWT cookie to be set
         time.sleep(5)  # You might want to replace this with a more robust wait condition
@@ -103,7 +114,7 @@ def scrape_jwt():
         jwt_cookie_name_base64 = "YW5ueV9zaG9wX2p3dA=="
         jwt_cookie_name = base64.b64decode(jwt_cookie_name_base64).decode('utf-8')
         jwt_cookie = driver.get_cookie(jwt_cookie_name)["value"]
-        print("Got the JWT cookie...")
+        logger.info("Got the JWT cookie...")
 
         return jwt_cookie
 
@@ -118,6 +129,7 @@ def get_jwt():
         jwt = scrape_jwt()
         return jsonify({"jwt": jwt})
     except Exception as e:
+        logger.error(f"Error scraping JWT: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/health', methods=['GET'])
